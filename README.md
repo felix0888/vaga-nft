@@ -45,11 +45,22 @@ npx hardhat run --network [NETWORK-NAME] scripts/deploy.js
 npx hardhat test
 ```
 
-**Special test script explained**
+_Special test script explained_
+
 The most important one is to test the scenario user without any ETH purchase with other's wallet.
 You can see `marketplace.sol` contract inherits the `EIP712MetaTransaction.sol` which is abstract contract. It means you can call the `executeMetaTransaction` which is defined in `EIP712MetaTransaction.sol` outside the smart contract.
 This is how the test case cover the above case.
-
+  1) Message is signed on the javascript side using `signingKey` which is generally of the centralized backend server.
+  2) `executeMetaTransaction` function of the `Marketplace` contract is called with parameters signing key, function signature, and (r, s, v).
+  3) `EIP712MetaTransaction` contract which is abstract and inherited by `Marketplace` contract verifies the signature by using the signing key, and (r, s, v).
+  4) If the transaction is valid it executes the `purchase` function of the smart contract which is encoded and passed as a parameter. They buyer address is passed like this...
+  ```solidity
+  const purchaseFunctionSig = marketplace.interface.encodeFunctionData(
+    "purchase",
+    [this.tokenCount + 1, bob.address, this.priceInDAI]
+  );
+  ```
+  As a result the buyer can purchase the NFT without paying the gas fee, instead it's reduced from the wallet of the  centralized backend server.
 
 - Gas Report
 ```
