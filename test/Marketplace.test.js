@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 const { BigNumber } = require("ethers");
@@ -5,7 +7,7 @@ const sigUtil = require('eth-sig-util');
 
 const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000";
 
-const privateKey = "0x1e8fdb29177e801779882a7648758413ba86d2f45d7d2b4381180ad307b5e8e1";
+const privateKey = process.env.PRIVATE_KEY;
 const signingKey = new ethers.Wallet(privateKey, ethers.provider);
 
 const domainType = [

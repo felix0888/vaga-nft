@@ -1,5 +1,6 @@
 .coverage_artifacts/
 .coverage_contracts/
+.env
 artifacts/
 build/
 cache/
